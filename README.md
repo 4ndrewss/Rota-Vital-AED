@@ -13,4 +13,4 @@ Esta entrega é referente à disciplina de Algoritmos e Estruturas de Dados (AED
 
 - **Estoque** → lista encadeada
 - **Requisições hospitalares** → fila
-- **Histórico de operações** → pilha (opcional)
+- **Histórico de operações** → pilha (opcional).
