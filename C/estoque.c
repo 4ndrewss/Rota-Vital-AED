@@ -42,8 +42,7 @@ void estoque_destruir(Estoque **estoque) {
 
 ResultadoEstoque estoque_inserir(Estoque *estoque, const ItemEstoque *item) {
     NoEstoque *novo;
-    NoEstoque *anterior = NULL;
-    NoEstoque *atual;
+    NoEstoque *ultimo;
 
     if (estoque == NULL || item == NULL || !item_valido(item)) {
         return ESTOQUE_PARAMETRO_INVALIDO;
@@ -59,18 +58,14 @@ ResultadoEstoque estoque_inserir(Estoque *estoque, const ItemEstoque *item) {
     novo->item = *item;
     novo->proximo = NULL;
 
-    /* Avança até o primeiro nó com validade posterior; empates mantêm a ordem de chegada. */
-    atual = estoque->inicio;
-    while (atual != NULL && strcmp(atual->item.validade, item->validade) <= 0) {
-        anterior = atual;
-        atual = atual->proximo;
-    }
-
-    novo->proximo = atual;
-    if (anterior == NULL) {
-        estoque->inicio = novo; /* inserção na cabeça */
+    if (estoque->inicio == NULL) {
+        estoque->inicio = novo; /* lista vazia: novo nó vira a cabeça */
     } else {
-        anterior->proximo = novo;
+        ultimo = estoque->inicio;
+        while (ultimo->proximo != NULL) {
+            ultimo = ultimo->proximo;
+        }
+        ultimo->proximo = novo;
     }
     estoque->tamanho++;
     return ESTOQUE_OK;
@@ -153,23 +148,6 @@ int estoque_total_disponivel(const Estoque *estoque, const char *tipoSanguineo,
         }
     }
     return total;
-}
-
-NoEstoque *estoque_proximo_a_vencer(const Estoque *estoque, const char *tipoSanguineo,
-                                    TipoHemocomponente componente) {
-    NoEstoque *atual;
-
-    if (estoque == NULL || tipoSanguineo == NULL) {
-        return NULL;
-    }
-    /* Como a lista é ordenada por validade, o primeiro compatível é o que vence antes. */
-    for (atual = estoque->inicio; atual != NULL; atual = atual->proximo) {
-        if (atual->item.componente == componente
-            && strcmp(atual->item.tipoSanguineo, tipoSanguineo) == 0) {
-            return atual;
-        }
-    }
-    return NULL;
 }
 
 void estoque_imprimir(const Estoque *estoque) {
