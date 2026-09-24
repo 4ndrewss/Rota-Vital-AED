@@ -15,15 +15,6 @@ Esta entrega é referente à disciplina de Algoritmos e Estruturas de Dados (AED
 - **Requisições hospitalares** → fila
 - **Histórico de operações** → pilha
 
-## Validação de Entrada (Entrega — Caio)
-
-Especificação completa e implementação da camada de blindagem e validação dos documentos de requisição de hemocomponentes:
-- Documentação técnica e especificação OpenAPI 3.0: [`VALIDACAO_ENTRADA.md`](./VALIDACAO_ENTRADA.md)
-- Código-fonte em Java: [`Java/src/br/org/cesar/rotavital/validacao/`](./Java/src/br/org/cesar/rotavital/validacao/)
-  - `DocumentoInvalidoException.java`: Exceção customizada detalhada por campo
-  - `ValidadorEntradaDocumento.java`: Validação física (magic bytes) e semântica (data, prefixo, responsável, assinatura)
-  - `TesteValidadorEntrada.java`: Bateria de testes cobrindo todos os cenários de erro e sucesso
-
 ## Implementação em C (Estoque, Fila e Pilha)
 
 Código em [`C/`](./C/):
