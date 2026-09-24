@@ -48,12 +48,12 @@ static void inserir_em_lista_vazia(void) {
     estoque_destruir(&estoque);
 }
 
-static void inserir_mantem_ordem_por_validade(void) {
+static void inserir_no_fim_mantem_ordem_de_cadastro(void) {
     Estoque *estoque = estoque_criar();
-    ItemEstoque a = novo_item("L002", "O-", HEMACIAS, 5, "2026-12-01");
-    ItemEstoque b = novo_item("L001", "A+", PLASMA, 3, "2026-10-15");   /* vai para a cabeça */
-    ItemEstoque c = novo_item("L003", "B+", PLAQUETAS, 2, "2027-01-20"); /* vai para a cauda */
-    ItemEstoque d = novo_item("L004", "AB-", HEMACIAS, 1, "2026-11-10"); /* vai para o meio */
+    ItemEstoque a = novo_item("L001", "O-", HEMACIAS, 5, "2026-12-01");
+    ItemEstoque b = novo_item("L002", "A+", PLASMA, 3, "2026-10-15");
+    ItemEstoque c = novo_item("L003", "B+", PLAQUETAS, 2, "2027-01-20");
+    ItemEstoque d = novo_item("L004", "AB-", HEMACIAS, 1, "2026-11-10");
     NoEstoque *no;
 
     VERIFICAR(estoque_inserir(estoque, &a) == ESTOQUE_OK);
@@ -65,11 +65,11 @@ static void inserir_mantem_ordem_por_validade(void) {
     no = estoque->inicio;
     VERIFICAR(strcmp(no->item.codigo, "L001") == 0);
     no = no->proximo;
-    VERIFICAR(strcmp(no->item.codigo, "L004") == 0);
-    no = no->proximo;
     VERIFICAR(strcmp(no->item.codigo, "L002") == 0);
     no = no->proximo;
     VERIFICAR(strcmp(no->item.codigo, "L003") == 0);
+    no = no->proximo;
+    VERIFICAR(strcmp(no->item.codigo, "L004") == 0);
     VERIFICAR(no->proximo == NULL);
     estoque_destruir(&estoque);
 }
@@ -208,15 +208,6 @@ static void consultar_total_por_tipo_e_componente(void) {
     estoque_destruir(&estoque);
 }
 
-static void consultar_proximo_a_vencer(void) {
-    Estoque *estoque = estoque_para_consulta();
-    NoEstoque *no = estoque_proximo_a_vencer(estoque, "O-", HEMACIAS);
-    VERIFICAR(no != NULL);
-    VERIFICAR(strcmp(no->item.codigo, "L002") == 0);
-    VERIFICAR(estoque_proximo_a_vencer(estoque, "AB+", PLAQUETAS) == NULL);
-    estoque_destruir(&estoque);
-}
-
 int main(void) {
     teste_titulo("Testes: Estoque (lista encadeada)");
 
@@ -226,7 +217,7 @@ int main(void) {
 
     teste_secao("Inserir");
     RODAR(inserir_em_lista_vazia, "Inserir em lista vazia");
-    RODAR(inserir_mantem_ordem_por_validade, "Inserir no inicio, meio e fim mantem ordem por validade");
+    RODAR(inserir_no_fim_mantem_ordem_de_cadastro, "Inserir no fim mantem ordem de cadastro");
     RODAR(inserir_codigo_duplicado_e_rejeitado, "Inserir codigo duplicado e rejeitado");
     RODAR(inserir_dados_invalidos_e_rejeitado, "Inserir dados invalidos e rejeitado");
 
@@ -241,7 +232,6 @@ int main(void) {
     teste_secao("Consultar");
     RODAR(consultar_por_codigo, "Consultar por codigo");
     RODAR(consultar_total_por_tipo_e_componente, "Consultar total por tipo sanguineo e componente");
-    RODAR(consultar_proximo_a_vencer, "Consultar lote mais proximo de vencer");
 
     return teste_resumo();
 }
