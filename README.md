@@ -19,10 +19,10 @@ Esta entrega é referente à disciplina de Algoritmos e Estruturas de Dados (AED
 
 Código em [`C/`](./C/):
 - `comum.h` / `comum.c`: tipos compartilhados (hemocomponente) e validações (tipo sanguíneo, data `AAAA-MM-DD`).
-- `estoque.h` / `estoque.c` — **lista encadeada**: nó `NoEstoque`, `malloc`/`free`, inserir, remover, retirar bolsas e consultar (busca por código, total por tipo sanguíneo + hemocomponente, próximo a vencer). Ordenada por validade (FEFO).
+- `estoque.h` / `estoque.c` — **lista encadeada**: nó `NoEstoque`, `malloc`/`free`, inserir, remover, retirar bolsas e consultar (busca por código, total por tipo sanguíneo + hemocomponente). Novos itens entram no fim da lista.
 - `fila.h` / `fila.c` — **fila** de requisições hospitalares: nó `NoRequisicao`, ponteiros `inicio` e `fim`, enqueue/dequeue em O(1), consultas (frente, busca por id, posição na fila, pendências por hospital). Ordem FIFO.
 - `pilha.h` / `pilha.c` — **pilha** do histórico de operações: nó `NoOperacao`, ponteiro `topo`, push/pop em O(1), consultas (topo, contagem por tipo). Ordem LIFO — permite desfazer a última operação.
-- `main.c`: demonstração — cadastra o estoque, enfileira requisições e as atende dando baixa nos lotes que vencem primeiro, registrando tudo no histórico (com exemplo de desfazer).
+- `main.c`: demonstração — mostra inserir/remover/consultar em cada estrutura separadamente (estoque, fila e histórico, com exemplo de desfazer).
 - `teste.h` + `teste_estoque.c`, `teste_fila.c`, `teste_pilha.c`: casos de teste de inserir/remover/consultar para cada estrutura, com saída `[PASSOU]`/`[FALHOU]` por caso.
 
 ### Rodando os testes pelo terminal
@@ -42,9 +42,9 @@ Saída esperada (trecho):
 
  Inserir
   [PASSOU] Inserir em lista vazia
-  [PASSOU] Inserir no inicio, meio e fim mantem ordem por validade
+  [PASSOU] Inserir no fim mantem ordem de cadastro
   ...
-Resultado: 15/15 casos passaram
+Resultado: 14/14 casos passaram
 ...
 === TODOS OS TESTES PASSARAM ===
 ```
