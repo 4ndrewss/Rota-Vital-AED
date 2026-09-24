@@ -83,44 +83,6 @@ static void enfileirar(FilaRequisicoes *fila, PilhaHistorico *historico, Requisi
     }
 }
 
-/*
- * Atende a requisição retirando bolsas dos lotes que vencem primeiro (FEFO).
- * Só dá baixa se o estoque cobrir o pedido inteiro.
- */
-static void atender(Estoque *estoque, PilhaHistorico *historico, const Requisicao *requisicao) {
-    char referencia[TAM_REFERENCIA];
-    char descricao[TAM_DESCRICAO];
-    int restante = requisicao->quantidade;
-    NoEstoque *lote;
-    int retirar;
-
-    snprintf(referencia, sizeof(referencia), "REQ-%d", requisicao->id);
-    printf("Atendendo #%d %s: %d bolsa(s) de %s %s -> ",
-           requisicao->id, requisicao->hospital, requisicao->quantidade,
-           nome_componente(requisicao->componente), requisicao->tipoSanguineo);
-
-    if (estoque_total_disponivel(estoque, requisicao->tipoSanguineo, requisicao->componente)
-        < requisicao->quantidade) {
-        printf("estoque insuficiente\n");
-        registrar(historico, OP_REQUISICAO_RECUSADA, referencia, requisicao->quantidade,
-                  "Estoque insuficiente");
-        return;
-    }
-
-    while (restante > 0) {
-        lote = estoque_proximo_a_vencer(estoque, requisicao->tipoSanguineo, requisicao->componente);
-        retirar = lote->item.quantidade < restante ? lote->item.quantidade : restante;
-        printf("%s(%d) ", lote->item.codigo, retirar);
-        snprintf(descricao, sizeof(descricao), "Para %s", referencia);
-        registrar(historico, OP_RETIRADA_ESTOQUE, lote->item.codigo, retirar, descricao);
-        estoque_retirar(estoque, lote->item.codigo, retirar);
-        restante -= retirar;
-    }
-    printf("\n");
-    registrar(historico, OP_REQUISICAO_ATENDIDA, referencia, requisicao->quantidade,
-              requisicao->hospital);
-}
-
 /* Desfaz a última operação se ela for uma entrada no estoque (cadastro feito por engano). */
 static void desfazer_ultima(Estoque *estoque, PilhaHistorico *historico) {
     const Operacao *topo = pilha_topo(historico);
@@ -144,7 +106,7 @@ int main(void) {
     FilaRequisicoes *fila = fila_criar();
     PilhaHistorico *historico = pilha_criar();
     const Requisicao *frente;
-    Requisicao atendida;
+    Requisicao removida;
     NoEstoque *no;
 
     if (estoque == NULL || fila == NULL || historico == NULL) {
@@ -171,9 +133,10 @@ int main(void) {
     printf("\nConsulta: hemacias O- disponiveis = %d bolsa(s)\n",
            estoque_total_disponivel(estoque, "O-", HEMACIAS));
 
-    no = estoque_proximo_a_vencer(estoque, "O-", HEMACIAS);
+    no = estoque_buscar(estoque, "HM-0002");
     if (no != NULL) {
-        printf("Proxima a vencer (O-, hemacias): %s em %s\n\n", no->item.codigo, no->item.validade);
+        printf("Busca HM-0002: %s %s, %d bolsa(s), validade %s\n\n", nome_componente(no->item.componente),
+               no->item.tipoSanguineo, no->item.quantidade, no->item.validade);
     }
 
     remover(estoque, historico, "PQ-0001", "Descarte: bolsa danificada");
@@ -197,24 +160,20 @@ int main(void) {
     printf("Posicao da requisicao #4: %d\n", fila_posicao(fila, 4));
     printf("Requisicoes pendentes do IMIP: %d\n\n", fila_contar_por_hospital(fila, "IMIP"));
 
-    while (fila_desenfileirar(fila, &atendida) == FILA_OK) {
-        atender(estoque, historico, &atendida);
+    if (fila_desenfileirar(fila, &removida) == FILA_OK) {
+        printf("Desenfileirada: #%d (%s)\n\n", removida.id, removida.hospital);
     }
-
-    printf("\n");
     fila_imprimir(fila);
-    printf("\n");
-    estoque_imprimir(estoque);
 
     printf("\n=== Rota Vital: Historico de Operacoes ===\n\n");
 
     inserir(estoque, historico, novo_item("HM-0099", "O+", HEMACIAS, 2, "2026-12-15")); /* por engano */
     desfazer_ultima(estoque, historico);
-    desfazer_ultima(estoque, historico); /* topo agora é um atendimento: não desfaz */
+    desfazer_ultima(estoque, historico); /* topo agora é uma requisição recebida: não desfaz */
 
-    printf("\nRequisicoes atendidas: %d | recusadas: %d\n\n",
-           pilha_contar_por_tipo(historico, OP_REQUISICAO_ATENDIDA),
-           pilha_contar_por_tipo(historico, OP_REQUISICAO_RECUSADA));
+    printf("\nEntradas no estoque: %d | requisicoes recebidas: %d\n\n",
+           pilha_contar_por_tipo(historico, OP_ENTRADA_ESTOQUE),
+           pilha_contar_por_tipo(historico, OP_REQUISICAO_RECEBIDA));
     pilha_imprimir(historico);
 
     pilha_destruir(&historico);
