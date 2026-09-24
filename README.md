@@ -60,3 +60,27 @@ gcc -std=c99 -o bin/rotavital main.c estoque.c fila.c pilha.c comum.c
 bin\rotavital     # Windows
 ./bin/rotavital   # Linux, macOS, WSL ou Git Bash
 ```
+
+## Implementação em Java (Fila)
+
+Código em [`Java/src/br/org/cesar/rotavital/`](./Java/src/br/org/cesar/rotavital/):
+- `comum/TipoHemocomponente.java` e `comum/Validacao.java`: equivalentes a `comum.h` / `comum.c`.
+- `fila/Requisicao.java`: modelo da requisição (POJO com construtor vazio e getters/setters, pronto para virar JSON no Spring Boot).
+- `fila/FilaRequisicoes.java` — **fila** com nós próprios (sem `java.util.Queue`), referências `inicio` e `fim`, `enfileirar`/`desenfileirar` em O(1) e as mesmas consultas da versão em C. Dados inválidos lançam `IllegalArgumentException` e desenfileirar fila vazia lança `FilaVaziaException`. Os métodos são `synchronized` para a classe poder virar um `@Service` do Spring.
+- `fila/TesteFila.java`: casos de teste equivalentes a `teste_fila.c`, com a mesma saída `[PASSOU]`/`[FALHOU]`.
+
+### Rodando os testes da fila em Java
+
+Requer JDK 11+ no PATH. No Git Bash, Linux ou macOS:
+
+```
+cd Java
+javac -d bin $(find src -name "*.java")
+java -cp bin br.org.cesar.rotavital.fila.TesteFila
+```
+
+No PowerShell, troque a linha do `javac` por:
+
+```
+javac -d bin (Get-ChildItem -Recurse src -Filter *.java).FullName
+```
