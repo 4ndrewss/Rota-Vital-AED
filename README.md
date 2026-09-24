@@ -6,14 +6,14 @@ Esta entrega é referente à disciplina de Algoritmos e Estruturas de Dados (AED
 
 ## Organização
 
-- `/c` — implementação das estruturas em C (malloc/free, ponteiros explícitos).
-- `/java` — reimplementação das mesmas estruturas em Java.
+- [`C/`](./C/) — implementação das estruturas em C (malloc/free, ponteiros explícitos).
+- [`Java/`](./Java/) — reimplementação das mesmas estruturas em Java.
 
 ## Estruturas
 
 - **Estoque** → lista encadeada
 - **Requisições hospitalares** → fila
-- **Histórico de operações** → pilha (opcional).
+- **Histórico de operações** → pilha
 
 ## Validação de Entrada (Entrega — Caio)
 
@@ -23,6 +23,7 @@ Especificação completa e implementação da camada de blindagem e validação 
   - `DocumentoInvalidoException.java`: Exceção customizada detalhada por campo
   - `ValidadorEntradaDocumento.java`: Validação física (magic bytes) e semântica (data, prefixo, responsável, assinatura)
   - `TesteValidadorEntrada.java`: Bateria de testes cobrindo todos os cenários de erro e sucesso
+
 ## Implementação em C (Estoque, Fila e Pilha)
 
 Código em [`C/`](./C/):
@@ -57,4 +58,14 @@ Resultado: 15/15 casos passaram
 === TODOS OS TESTES PASSARAM ===
 ```
 
-O script retorna código de saída 0 se tudo passar e 1 se algum caso falhar. Para a demonstração completa: `gcc -std=c99 -o bin/rotavital main.c estoque.c fila.c pilha.c comum.c` e rode `bin/rotavital`.
+O script retorna código de saída 0 se tudo passar e 1 se algum caso falhar.
+
+### Rodando a demonstração
+
+```
+cd C
+mkdir bin         # só na primeira vez (os scripts de teste também criam)
+gcc -std=c99 -o bin/rotavital main.c estoque.c fila.c pilha.c comum.c
+bin\rotavital     # Windows
+./bin/rotavital   # Linux, macOS, WSL ou Git Bash
+```
