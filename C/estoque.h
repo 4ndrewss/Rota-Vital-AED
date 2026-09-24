@@ -4,9 +4,7 @@
 /*
  * Estoque de hemocomponentes — lista simplesmente encadeada.
  *
- * Os itens ficam ordenados por data de validade (mais próxima primeiro),
- * seguindo a política FEFO (First Expired, First Out): a cabeça da lista
- * é sempre a bolsa que deve ser expedida primeiro.
+ * Novos itens entram no fim da lista, mantendo a ordem de cadastro.
  */
 
 #include "comum.h"
@@ -46,7 +44,7 @@ Estoque *estoque_criar(void);
 /* Libera todos os nós e o próprio estoque; deixa *estoque == NULL. */
 void estoque_destruir(Estoque **estoque);
 
-/* Insere uma cópia de `item`, mantendo a ordem por validade. */
+/* Insere uma cópia de `item` no fim da lista. */
 ResultadoEstoque estoque_inserir(Estoque *estoque, const ItemEstoque *item);
 
 /* Remove (e libera) o item com o código informado. */
@@ -61,10 +59,6 @@ NoEstoque *estoque_buscar(const Estoque *estoque, const char *codigo);
 /* Soma as bolsas disponíveis de um tipo sanguíneo + hemocomponente. */
 int estoque_total_disponivel(const Estoque *estoque, const char *tipoSanguineo,
                              TipoHemocomponente componente);
-
-/* Retorna o primeiro item (validade mais próxima) compatível, ou NULL. */
-NoEstoque *estoque_proximo_a_vencer(const Estoque *estoque, const char *tipoSanguineo,
-                                    TipoHemocomponente componente);
 
 void estoque_imprimir(const Estoque *estoque);
 
