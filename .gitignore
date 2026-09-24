@@ -1,0 +1,14 @@
+# Build artifacts
+bin/
+*.class
+target/
+build/
+
+# IDE configs
+.idea/
+.vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
