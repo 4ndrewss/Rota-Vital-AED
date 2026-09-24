@@ -14,8 +14,6 @@ import java.util.List;
  *
  * Não usa java.util.Queue: os nós são implementados à mão, como na versão em C.
  * Na integração com Spring Boot, a classe pode virar um @Service sem mudanças;
- * os métodos são synchronized porque um bean Spring é compartilhado entre as
- * threads das requisições HTTP.
  */
 public class FilaRequisicoes {
 
@@ -38,7 +36,7 @@ public class FilaRequisicoes {
      *
      * @throws IllegalArgumentException se algum campo for inválido
      */
-    public synchronized int enfileirar(Requisicao requisicao) {
+    public int enfileirar(Requisicao requisicao) {
         validar(requisicao);
 
         NoRequisicao novo = new NoRequisicao(new Requisicao(requisicao));
@@ -60,7 +58,7 @@ public class FilaRequisicoes {
      *
      * @throws FilaVaziaException se não houver requisições pendentes
      */
-    public synchronized Requisicao desenfileirar() {
+    public Requisicao desenfileirar() {
         if (inicio == null) {
             throw new FilaVaziaException();
         }
@@ -75,12 +73,12 @@ public class FilaRequisicoes {
     }
 
     /** Retorna (uma cópia de) a requisição do início sem removê-la, ou null se vazia. */
-    public synchronized Requisicao frente() {
+    public Requisicao frente() {
         return inicio == null ? null : new Requisicao(inicio.requisicao);
     }
 
     /** Retorna (uma cópia de) a requisição com o id informado, ou null. */
-    public synchronized Requisicao buscar(int id) {
+    public Requisicao buscar(int id) {
         for (NoRequisicao atual = inicio; atual != null; atual = atual.proximo) {
             if (atual.requisicao.getId() == id) {
                 return new Requisicao(atual.requisicao);
@@ -90,7 +88,7 @@ public class FilaRequisicoes {
     }
 
     /** Posição (1 = próxima a ser atendida) da requisição com o id, ou 0 se não existir. */
-    public synchronized int posicao(int id) {
+    public int posicao(int id) {
         int posicao = 1;
         for (NoRequisicao atual = inicio; atual != null; atual = atual.proximo, posicao++) {
             if (atual.requisicao.getId() == id) {
@@ -101,7 +99,7 @@ public class FilaRequisicoes {
     }
 
     /** Quantas requisições pendentes existem para o hospital informado. */
-    public synchronized int contarPorHospital(String hospital) {
+    public int contarPorHospital(String hospital) {
         int total = 0;
         if (hospital == null) {
             return 0;
@@ -115,7 +113,7 @@ public class FilaRequisicoes {
     }
 
     /** Cópia das requisições em ordem de atendimento (útil para expor como JSON). */
-    public synchronized List<Requisicao> listar() {
+    public List<Requisicao> listar() {
         List<Requisicao> lista = new ArrayList<>(tamanho);
         for (NoRequisicao atual = inicio; atual != null; atual = atual.proximo) {
             lista.add(new Requisicao(atual.requisicao));
@@ -123,15 +121,15 @@ public class FilaRequisicoes {
         return lista;
     }
 
-    public synchronized int tamanho() {
+    public int tamanho() {
         return tamanho;
     }
 
-    public synchronized boolean vazia() {
+    public boolean vazia() {
         return inicio == null;
     }
 
-    public synchronized void imprimir() {
+    public void imprimir() {
         System.out.printf("Fila de requisicoes (%d pendente(s)):%n", tamanho);
         if (inicio == null) {
             System.out.println("  (vazia)");
