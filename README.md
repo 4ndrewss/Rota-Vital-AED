@@ -61,10 +61,13 @@ bin\rotavital     # Windows
 ./bin/rotavital   # Linux, macOS, WSL ou Git Bash
 ```
 
-## Implementação em Java (Fila e Pilha)
+## Implementação em Java (Estoque, Fila e Pilha)
 
 Código em [`Java/src/br/org/cesar/rotavital/`](./Java/src/br/org/cesar/rotavital/):
 - `comum/TipoHemocomponente.java` e `comum/Validacao.java`: equivalentes a `comum.h` / `comum.c`.
+- `estoque/ItemEstoque.java`: modelo do lote (equivalente ao struct `ItemEstoque` de `estoque.h`).
+- `estoque/Estoque.java` — **lista encadeada** com nós próprios (sem `java.util.LinkedList`), referência `inicio`, inserir no fim, remover, retirar bolsas e as mesmas consultas da versão em C (busca por código, total por tipo sanguíneo + hemocomponente). Dados inválidos lançam `IllegalArgumentException`; código duplicado, item inexistente e quantidade insuficiente lançam `EstoqueException` (com o `Motivo`, equivalente a `ResultadoEstoque` em C).
+- `estoque/TesteEstoque.java`: casos de teste equivalentes a `teste_estoque.c`, com a mesma saída `[PASSOU]`/`[FALHOU]`.
 - `fila/Requisicao.java`: modelo da requisição (POJO com construtor vazio e getters/setters, pronto para virar JSON no Spring Boot).
 - `fila/FilaRequisicoes.java` — **fila** com nós próprios (sem `java.util.Queue`), referências `inicio` e `fim`, `enfileirar`/`desenfileirar` em O(1) e as mesmas consultas da versão em C. Dados inválidos lançam `IllegalArgumentException` e desenfileirar fila vazia lança `FilaVaziaException`. Os métodos não usam `synchronized` nesta entrega (Unidade 1) — controle de concorrência fica fora do escopo de AED e pode ser adicionado depois, se a classe virar um `@Service` do Spring.
 - `fila/TesteFila.java`: casos de teste equivalentes a `teste_fila.c`, com a mesma saída `[PASSOU]`/`[FALHOU]`.
@@ -79,6 +82,7 @@ Requer JDK 11+ no PATH. No Git Bash, Linux ou macOS:
 ```
 cd Java
 javac -d bin $(find src -name "*.java")
+java -cp bin br.org.cesar.rotavital.estoque.TesteEstoque
 java -cp bin br.org.cesar.rotavital.fila.TesteFila
 java -cp bin br.org.cesar.rotavital.historico.TestePilha
 ```
