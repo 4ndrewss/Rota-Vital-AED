@@ -61,15 +61,18 @@ bin\rotavital     # Windows
 ./bin/rotavital   # Linux, macOS, WSL ou Git Bash
 ```
 
-## Implementação em Java (Fila)
+## Implementação em Java (Fila e Pilha)
 
 Código em [`Java/src/br/org/cesar/rotavital/`](./Java/src/br/org/cesar/rotavital/):
 - `comum/TipoHemocomponente.java` e `comum/Validacao.java`: equivalentes a `comum.h` / `comum.c`.
 - `fila/Requisicao.java`: modelo da requisição (POJO com construtor vazio e getters/setters, pronto para virar JSON no Spring Boot).
 - `fila/FilaRequisicoes.java` — **fila** com nós próprios (sem `java.util.Queue`), referências `inicio` e `fim`, `enfileirar`/`desenfileirar` em O(1) e as mesmas consultas da versão em C. Dados inválidos lançam `IllegalArgumentException` e desenfileirar fila vazia lança `FilaVaziaException`. Os métodos não usam `synchronized` nesta entrega (Unidade 1) — controle de concorrência fica fora do escopo de AED e pode ser adicionado depois, se a classe virar um `@Service` do Spring.
 - `fila/TesteFila.java`: casos de teste equivalentes a `teste_fila.c`, com a mesma saída `[PASSOU]`/`[FALHOU]`.
+- `historico/TipoOperacao.java` e `historico/Operacao.java`: equivalentes ao enum `TipoOperacao` e ao struct `Operacao` de `pilha.h`.
+- `historico/PilhaHistorico.java` — **pilha** com nós próprios (sem `java.util.Stack`/`Deque`), referência `topo`, `empilhar`/`desempilhar` em O(1) e as mesmas consultas da versão em C (topo, contagem por tipo). Dados inválidos lançam `IllegalArgumentException` e desempilhar histórico vazio lança `PilhaVaziaException`.
+- `historico/TestePilha.java`: casos de teste equivalentes a `teste_pilha.c`, com a mesma saída `[PASSOU]`/`[FALHOU]`.
 
-### Rodando os testes da fila em Java
+### Rodando os testes em Java
 
 Requer JDK 11+ no PATH. No Git Bash, Linux ou macOS:
 
@@ -77,6 +80,7 @@ Requer JDK 11+ no PATH. No Git Bash, Linux ou macOS:
 cd Java
 javac -d bin $(find src -name "*.java")
 java -cp bin br.org.cesar.rotavital.fila.TesteFila
+java -cp bin br.org.cesar.rotavital.historico.TestePilha
 ```
 
 No PowerShell, troque a linha do `javac` por:
