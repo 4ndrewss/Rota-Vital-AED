@@ -101,7 +101,7 @@ javac -d bin (Get-ChildItem -Recurse src -Filter *.java).FullName
 |---|---|
 | Andrews Queiroz | [@4ndrewss](https://github.com/4ndrewss) |
 | Caio Gilles | [@CaioGilles](https://github.com/CaioGilles) |
-| Enzo Amorim |  |
+| Enzo Amorim | [ENZOBRS](https://github.com/ENZOBRS)
 | Gabriela Bayo | [@gabibayo](https://github.com/gabibayo) |
 | Glauco Santos| [@glaucosantos002](https://github.com/glaucosantos002) |
 | Gustavo Veloso | [@velosogustavo](https://github.com/velosogustavo) |
