@@ -1,21 +1,21 @@
-# Rota Vital — AED (Unidade 1)
+# 🩸 Rota Vital — AED (Unidade 1)
 
 Projeto Integrador Rota Vital (CESAR School — ADS, 3º período): sistema de gestão e distribuição de hemocomponentes.
 
 Esta entrega é referente à disciplina de Algoritmos e Estruturas de Dados (AED), Unidade 1: implementação das estruturas básicas do domínio (estoque, requisições e histórico) em C, com reimplementação equivalente em Java.
 
-## Organização
+## 🗂️ Organização
 
 - [`C/`](./C/) — implementação das estruturas em C (malloc/free, ponteiros explícitos).
 - [`Java/`](./Java/) — reimplementação das mesmas estruturas em Java.
 
-## Estruturas
+## 🧱 Estruturas
 
 - **Estoque** → lista encadeada
 - **Requisições hospitalares** → fila
 - **Histórico de operações** → pilha
 
-## Implementação em C (Estoque, Fila e Pilha)
+## ⚙️ Implementação em C (Estoque, Fila e Pilha)
 
 Código em [`C/`](./C/):
 - `comum.h` / `comum.c`: tipos compartilhados (hemocomponente) e validações (tipo sanguíneo, data `AAAA-MM-DD`).
@@ -25,7 +25,7 @@ Código em [`C/`](./C/):
 - `main.c`: demonstração — mostra inserir/remover/consultar em cada estrutura separadamente (estoque, fila e histórico, com exemplo de desfazer).
 - `teste.h` + `teste_estoque.c`, `teste_fila.c`, `teste_pilha.c`: casos de teste de inserir/remover/consultar para cada estrutura, com saída `[PASSOU]`/`[FALHOU]` por caso.
 
-### Rodando os testes pelo terminal
+### ▶️ Rodando os testes pelo terminal
 
 Requer `gcc` no PATH (MinGW/MSYS2 no Windows).
 
@@ -51,7 +51,7 @@ Resultado: 14/14 casos passaram
 
 O script retorna código de saída 0 se tudo passar e 1 se algum caso falhar.
 
-### Rodando a demonstração
+### 🖥️ Rodando a demonstração
 
 ```
 cd C
@@ -61,7 +61,7 @@ bin\rotavital     # Windows
 ./bin/rotavital   # Linux, macOS, WSL ou Git Bash
 ```
 
-## Implementação em Java (Estoque, Fila e Pilha)
+## ☕ Implementação em Java (Estoque, Fila e Pilha)
 
 Código em [`Java/src/br/org/cesar/rotavital/`](./Java/src/br/org/cesar/rotavital/):
 - `comum/TipoHemocomponente.java` e `comum/Validacao.java`: equivalentes a `comum.h` / `comum.c`.
@@ -75,7 +75,7 @@ Código em [`Java/src/br/org/cesar/rotavital/`](./Java/src/br/org/cesar/rotavita
 - `historico/PilhaHistorico.java` — **pilha** com nós próprios (sem `java.util.Stack`/`Deque`), referência `topo`, `empilhar`/`desempilhar` em O(1) e as mesmas consultas da versão em C (topo, contagem por tipo). Dados inválidos lançam `IllegalArgumentException` e desempilhar histórico vazio lança `PilhaVaziaException`.
 - `historico/TestePilha.java`: casos de teste equivalentes a `teste_pilha.c`, com a mesma saída `[PASSOU]`/`[FALHOU]`.
 
-### Rodando os testes em Java
+### ▶️ Rodando os testes em Java
 
 Requer JDK 11+ no PATH. No Git Bash, Linux ou macOS:
 
@@ -92,3 +92,35 @@ No PowerShell, troque a linha do `javac` por:
 ```
 javac -d bin (Get-ChildItem -Recurse src -Filter *.java).FullName
 ```
+
+---
+
+## 👥 Membros da Equipe
+
+| Integrante | GitHub |
+|---|---|
+| Andrews Queiroz | [@4ndrewss](https://github.com/4ndrewss) |
+| Caio Gilles | [@CaioGilles](https://github.com/CaioGilles) |
+| Enzo Amorim | [@ENZOBRS](https://github.com/ENZOBRS) |
+| Gabriela Bayo | [@gabibayo](https://github.com/gabibayo) |
+| Glauco Santos| [@glaucosantos002](https://github.com/glaucosantos002) |
+| Gustavo Veloso | [@velosogustavo](https://github.com/velosogustavo) |
+| Hilton Resende | [@HResende23](https://github.com/HResende23) |
+
+---
+
+## 📌 Gestão e Organização
+
+O acompanhamento das etapas de construção do Rota Vital, a divisão técnica da equipe e o backlog
+do projeto foram gerenciados via Trello.
+
+📋 **Acesso ao Quadro:** [Acessar Trello da Equipe](https://trello.com/b/2mXGnXOQ/rota-vitalaedav1)
+
+<img width="1277" height="718" alt="image" src="https://github.com/user-attachments/assets/9515d18a-1147-4551-adb4-b8f2a16c0ba7" />
+
+---
+
+## 📄 Relatório Técnico
+
+Toda a tradução comentada C ↔ Java das três estruturas (estoque, fila, histórico):
+[`Rota_Vital__Traducoes_C_Java.pdf`](./docs/Rota_Vital__Traducoes_C_Java.pdf)
