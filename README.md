@@ -123,4 +123,4 @@ do projeto foram gerenciados via Trello.
 ## 📄 Relatório Técnico
 
 Toda a tradução comentada C ↔ Java das três estruturas (estoque, fila, histórico):
-[`Rota_Vital__Traducoes_C_Java.pdf`](./docs/Rota_Vital__Traducoes_C_Java.pdf)
+[`Rota_Vital__Traducoes_C_Java.pdf`](./docs/Rota_Vital_Traducoes_C_Java.pdf)
